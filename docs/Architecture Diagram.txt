@@ -1,0 +1,55 @@
+title Manuszam System Architecture
+
+// User Side
+User [icon: user]
+
+// Frontend
+Frontend [icon: vue-dot-js] {
+  UI [icon: monitor, label: "Vue.js Frontend"]
+  UI Test [icon: monitor, label: "Test Page"]
+}
+
+// Backend
+Backend [icon: server] {
+  FastAPI Backend [icon: python, label: "FastAPI API"]
+  FastAPI Test API [icon: python, label: "FastAPI Test API"]
+
+  PostgreSQL [icon: postgresql, label: "Metadata DB"]
+  File Storage [icon: aws-s3, label: "S3 Bucket"]
+  ML Training Service [icon: cpu, label: "ML Training (Python)"]
+}
+
+// Audio Handling
+Audio Handling [icon: music] {
+  ML Model Loader [icon: brain, label: "Model Loader"]
+  Audio Fingerprint DB [icon: database, label: "Fingerprint DB (SQLite/PG)"]
+}
+
+// Inference Flow
+Inference [icon: activity] {
+  Test User [icon: user, label: "User (Test)"]
+  Test UI [icon: monitor, label: "Test Page"]
+  Test FastAPI [icon: python, label: "FastAPI Test API"]
+  ML Matcher [icon: brain, label: "ML Model/Matcher"]
+}
+
+// Connections for Training Flow
+User > UI: Uploads Machine Info & Audio
+UI > FastAPI Backend: API Request
+FastAPI Backend > PostgreSQL: Store metadata
+FastAPI Backend > File Storage: Store files
+FastAPI Backend > ML Training Service: Trigger training
+
+File Storage > ML Model Loader
+ML Training Service > ML Model Loader: Use Normal + Fault Audio
+ML Model Loader > Audio Fingerprint DB: Generate Fingerprints
+
+// Connections for Inference Flow
+Test User > Test UI: Uploads Test Audio
+Test UI > Test FastAPI: Test Audio
+Test FastAPI > ML Matcher: Fingerprint Matching
+
+// Optional: Show that ML Matcher uses Audio Fingerprint DB
+ML Matcher > Audio Fingerprint DB: Lookup Fingerprints
+Test FastAPI < ML Matcher: Return result
+Test UI < Test FastAPI
