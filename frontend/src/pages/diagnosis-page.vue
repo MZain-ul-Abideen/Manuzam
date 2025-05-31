@@ -1,17 +1,21 @@
 <script setup>
 import { ref } from 'vue'
+import Banner from '../components/banner-component.vue'
 
 const selectedFile = ref(null)
 const uploadStatus = ref('')
+const fileInput = ref(null)
 
-function handleFileChange(event) {
-  selectedFile.value = event.target.files[0]
-  uploadStatus.value = ''
+function triggerFileInput() {
+  fileInput.value?.click()
 }
 
-async function uploadFile() {
+async function handleAndUpload(event) {
+  selectedFile.value = event.target.files[0]
+  uploadStatus.value = ''
+
   if (!selectedFile.value) {
-    alert('Please select a file to upload.')
+    alert('No file selected.')
     return
   }
 
@@ -30,33 +34,68 @@ async function uploadFile() {
 
     const result = await response.json()
     console.log('Upload successful:', result)
-    uploadStatus.value = '✅ File uploaded successfully!'
+    uploadStatus.value = 'File uploaded successfully!'
   } catch (error) {
     console.error('Upload failed:', error)
-    uploadStatus.value = '❌ Upload failed. Please try again.'
+    uploadStatus.value = 'Upload failed. Please try again'
   }
 }
 </script>
 
+
 <template>
   <div>
-    <h1>Diagnosis</h1>
-    <hr>
+    <Banner />
+  </div>
+  <div class="wrapper">
+    <h1 class="mb-4 mt-3">Click to Record</h1>
 
-    <input type="file" accept="audio/*" @change="handleFileChange" class="mt-3" />
-    <div v-if="selectedFile" class="mt-2">Selected: {{ selectedFile.name }}</div>
+    <div class="record-button-ring">
+      <button class="record-button"><img src="../assets/icons/record.svg" /></button>
+    </div>
 
-    <button class="mt-3" @click="uploadFile">Upload</button>
+    <!-- Hidden file input -->
+    <input
+      type="file"
+      accept="audio/*"
+      ref="fileInput"
+      @change="handleAndUpload"
+      style="display: none"
+    />
+
+    <!-- Upload button -->
+    <button class="button button-primary mt-4" @click="triggerFileInput">
+      <img src="../assets/icons/upload.svg" class="upload-icon" />Upload
+    </button>
 
     <div v-if="uploadStatus" class="mt-2">{{ uploadStatus }}</div>
   </div>
 </template>
 
+
 <style scoped>
-.mt-2 {
-  margin-top: 0.5rem;
+.wrapper {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.mt-3 {
-  margin-top: 1rem;
+.record-button-ring {
+  background-color: transparent;
+  padding: 0.7rem;
+  border-radius: 50%;
+  border: 4px solid var(--accent-color1);
+}
+.record-button {
+  background: var(--accent-color2);
+  border: none;
+  cursor: pointer;
+  height: 25rem;
+  width: 25rem;
+  border-radius: 50%;
+}
+.upload-icon {
+  padding-right: 0.5rem;
 }
 </style>
