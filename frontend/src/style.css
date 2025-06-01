@@ -1,79 +1,230 @@
 /* ===============================
    CSS Variables for Theme
    =============================== */
-   :root {
-    /* Accent Colors */
-    --accent-color1: #1DB954;
-    --accent-color2-start: #1DB954;
-    --accent-color2-end: #0D5326;
-    --accent-color3: #0D5326;
-  
-    /* Primary & Secondary Colors */
-    --primary-1: #0A0A0A;
-    --secondary-1: #5C5C5C;
-    --secondary-2: #909090;
-    --secondary-3: #AEAEAE;
-  
-    /* UI Colors */
-    --ui-1: #EEEEEE;
-    --ui-2: #111111;
-    --ui-3: #cecece;
-  
-    /* Font */
-    --font-main: 'Bebas Neue', sans-serif;
-  
-    /* Font Sizes */
-    --hero-heading: 48px;
-    --h1: 36px;
-    --h2: 28px;
-    --h3: 24px;
-    --body1: 16px;
-    --body2: 14px;
-    --body3: 12px;
-  }
-  
-  /* ===============================
+:root {
+  /* Accent Colors */
+  --accent-color1: #1DB954;
+  --accent-color2: linear-gradient(232deg, rgba(29, 185, 84, 1) 0%, rgba(13, 83, 38, 1) 100%);
+  --accent-color3: #0D5326;
+
+  /* Primary & Secondary Colors */
+  --primary-1: #0A0A0A;
+  --secondary-1: #5C5C5C;
+  --secondary-2: #909090;
+  --secondary-3: #AEAEAE;
+  --danger-color: #FF0000;
+
+  /* UI Colors */
+  --ui-1: #EEEEEE;
+  --ui-2: #111111;
+  --ui-3: #cecece;
+
+  /* Font */
+  --font-main: 'Bebas Neue', sans-serif;
+
+  /* Font Sizes */
+  --hero-heading: 48px;
+  --h1: 36px;
+  --h2: 28px;
+  --h3: 24px;
+  --body1: 16px;
+  --body2: 14px;
+  --body3: 12px;
+}
+
+/* ===============================
      Base Styles
      =============================== */
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: var(--font-main);
-    background-color: var(--primary-1);
-  }
-  
-  a {
-    text-decoration: none;
-    color: var(--ui-1);
-    transition: color 0.3s ease;
-  }
-  a:hover {
-    color: var(--ui-3);
-  }
-  
-  /* ===============================
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--primary-1);
+  overflow-x: hidden;
+  color: var(--accent-color1);
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: var(--ui-1);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--ui-3);
+}
+
+/* ===============================
      Headings
      =============================== */
-  h1 {
-    font-size: var(--h1);
-    margin: 0.5em 0;
-  }
-  h2 {
-    font-size: var(--h2);
-    margin: 0.5em 0;
-  }
-  h3 {
-    font-size: var(--h3);
-    margin: 0.5em 0;
-  }
-  .hero-heading {
-    font-size: var(--hero-heading);
-  }
-  
-  /* ===============================
+h1 {
+  font-size: var(--h1);
+}
+
+h2 {
+  font-size: var(--h2);
+}
+
+h3 {
+  font-size: var(--h3);
+}
+
+.hero-heading {
+  font-size: var(--hero-heading);
+}
+
+/* ===============================
      Paragraphs
      =============================== */
-  p {
-    font-size: var(--body1);
-    margin: 0.5em 0;
+p {
+  font-size: var(--body1);
+  font-family: Source Sans Pro, sans-serif;
+  margin: 0 !important;
+}
+
+.hero-heading {
+  font-size: var(--hero-heading);
+  font-family: var(--font-main);
+  color: var(--accent-color1);
+  margin: 0;
+}
+
+.button {
+  background-color: transparent;
+  color: var(--accent-color1);
+  padding: 8px 50px;
+  border-radius: 35px;
+  cursor: pointer;
+  font-size: var(--h3);
+  transition: 0.3s ease;
+}
+
+.button:hover {
+  box-shadow: 0 0 10px rgba(90, 90, 90, 0.5);
+}
+
+.button-primary {
+  border: 1px solid var(--accent-color1);
+  color: var(--accent-color1) !important;
+}
+.button-secondary {
+  border: 1px solid var(--ui-1);
+  color: var(--ui-1) !important;
+}
+
+.button-solid {
+  background: var(--accent-color2);
+  color: var(--ui-1) !important;
+  border: none;
+  border-radius: 15px;
   }
+
+.button-danger {
+  background: var(--danger-color);
+  color: var(--ui-1) !important;
+  border: none;
+}
+.card-container {
+  border: 1px solid var(--accent-color3);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+
+.coolinput {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  font-family: Source Sans Pro, sans-serif;
+  font-size: var(--body1);
+
+}
+
+.coolinput label.text {
+  color: var(--accent-color1);
+  position: relative;
+  top: 0.5rem;
+  margin: 0 0 0 7px;
+  padding: 0 3px;
+  background: var(--primary-1);
+  width: fit-content;
+}
+
+.coolinput input.input {
+  padding: 11px 10px;
+  border: 2px var(--accent-color3) solid;
+  border-radius: 1rem;
+  background: transparent;
+  color: var(--ui-1);
+}
+
+.coolinput input.input:focus {
+  outline: none;
+}
+
+.coolinput input::placeholder {
+  color: var(--accent-color3);
+}
+
+.coolinput textarea.input {
+  padding: 11px 10px;
+  border: 2px var(--accent-color3) solid;
+  border-radius: 1rem;
+  background: transparent;
+  color: var(--ui-1);
+  font-family: Source Sans Pro, sans-serif;
+  font-size: var(--body1);
+  resize: vertical; /* Allows vertical resizing only */
+  min-height: 100px; /* Optional: default height */
+}
+
+.coolinput textarea.input:focus {
+  outline: none;
+}
+
+.coolinput textarea::placeholder {
+  color: var(--accent-color3);
+}
+
+
+.signin-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.signin-card {
+  padding: 5rem 7rem;
+  border: 1px solid var(--accent-color1);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 600px;
+}
+
+.link-pass {
+  color: var(--accent-color3);
+  font-size: var(--body2);
+  cursor: pointer;
+  font-family: Source Sans Pro, sans-serif;
+  text-align: right;
+  transition: 0.1s ease-in-out;
+}
+
+.link-pass:hover {
+  color: var(--accent-color1);
+}
+
+.link-text {
+  color: var(--accent-color3);
+  font-size: var(--body2);
+  font-family: Source Sans Pro, sans-serif;
+  margin-bottom: 1rem;
+  text-align: center;
+  margin-top: 25px;
+}
