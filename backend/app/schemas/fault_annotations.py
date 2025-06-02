@@ -1,3 +1,5 @@
+#backend/app/schemas/fault_annotations.py
+
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -15,5 +17,5 @@ class FaultAnnotationRead(FaultAnnotationBase):
     user_id: int
     annotated_at: datetime
 
-    class Config:
-        orm_mode = True
+class Config:
+    from_attributes = True

@@ -1,3 +1,5 @@
+#backend/app/schemas/normal_audio_samples.py
+
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -14,5 +16,5 @@ class NormalAudioSampleRead(NormalAudioSampleBase):
     user_id: int
     uploaded_at: datetime
 
-    class Config:
-        orm_mode = True
+class Config:
+    from_attributes = True

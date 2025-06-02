@@ -1,3 +1,5 @@
+#backend/app/schemas/faults.py
+
 from pydantic import BaseModel
 
 class FaultBase(BaseModel):
@@ -11,5 +13,5 @@ class FaultRead(FaultBase):
     id: int
     machine_id: int
 
-    class Config:
-        orm_mode = True
+class Config:
+    from_attributes = True

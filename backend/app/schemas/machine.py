@@ -1,3 +1,5 @@
+#backend/app/schemas/machine.py
+
 from pydantic import BaseModel
 from datetime import datetime, date
 
@@ -19,5 +21,5 @@ class MachineRead(MachineBase):
     user_id: int
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+class Config:
+    from_attributes = True

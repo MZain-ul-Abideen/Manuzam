@@ -1,4 +1,4 @@
-# app/schemas/user_schemas.py
+# app/schemas/users.py
 
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
@@ -14,5 +14,5 @@ class UserOut(BaseModel):
     email: EmailStr
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+class Config:
+    from_attributes = True

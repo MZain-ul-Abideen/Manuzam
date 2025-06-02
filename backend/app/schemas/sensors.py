@@ -10,6 +10,5 @@ class SensorCreate(SensorBase):
 class SensorRead(SensorBase):
     id: int
     machine_id: int
-
-    class Config:
-        orm_mode = True
+class Config:
+    from_attributes = True

@@ -1,4 +1,4 @@
-from .users import UserCreate, UserRead
+from .users import UserCreate, UserOut
 from .machine import MachineCreate, MachineRead
 from .sensors import SensorCreate, SensorRead
 from .normal_audio_samples import NormalAudioSampleCreate, NormalAudioSampleRead
