@@ -52,7 +52,7 @@ import machinelistIcon from '../assets/sidenav-icons/machine-list.svg'
 const navLinks = [
   { icon: dashboardIcon, alt: 'Dashboard', to: '/dashboard' },
   { icon: diagnosisIcon, alt: 'Diagnosis', to: '/diagnosis' },
-  { icon: machinelistIcon, alt: 'Machine List', to: '/ListMachine' },
+  { icon: machinelistIcon, alt: 'Machine List', to: '/list_machines' },
   { icon: addmachineIcon, alt: 'Add Machine', to: '/AddMachine' },
 ]
 

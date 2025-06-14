@@ -1,9 +1,22 @@
-# backend/main.py
-
 from fastapi import FastAPI
-from app.api import api_router  # Import the grouped router from api/__init__.py
+from fastapi.middleware.cors import CORSMiddleware
+from app.api import api_router  # ✅ Import the combined API router
 
 app = FastAPI()
 
-# Register all API routes from app/api
+# Allow requests from your frontend
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ✅ Include all routes
 app.include_router(api_router)

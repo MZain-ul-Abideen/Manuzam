@@ -29,3 +29,37 @@ async def create_machine(machine: machine.MachineCreate, db: AsyncSession = Depe
 async def get_machines(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(models.Machine))
     return result.scalars().all()
+
+@router.get("/{machine_id}", response_model=machine.MachineRead)
+async def get_machine_by_id(machine_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Machine).where(models.Machine.id == machine_id))
+    machine_obj = result.scalar_one_or_none()
+    if not machine_obj:
+        raise HTTPException(status_code=404, detail="Machine not found")
+    return machine_obj
+
+@router.put("/{machine_id}", response_model=machine.MachineRead)
+async def update_machine(machine_id: int, update_data: machine.MachineUpdate, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Machine).where(models.Machine.id == machine_id))
+    machine_obj = result.scalar_one_or_none()
+    if not machine_obj:
+        raise HTTPException(status_code=404, detail="Machine not found")
+    
+    update_fields = update_data.dict(exclude_unset=True)
+    for field, value in update_fields.items():
+        setattr(machine_obj, field, value)
+
+    await db.commit()
+    await db.refresh(machine_obj)
+    return machine_obj
+
+@router.delete("/{machine_id}")
+async def delete_machine(machine_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Machine).where(models.Machine.id == machine_id))
+    machine_obj = result.scalar_one_or_none()
+    if not machine_obj:
+        raise HTTPException(status_code=404, detail="Machine not found")
+
+    await db.delete(machine_obj)
+    await db.commit()
+    return {"message": "Machine deleted successfully"}

@@ -20,7 +20,8 @@ const route = useRoute()
 const BannerText = [
   { path: '/dashboard', headind: 'Dashboard', subheading: 'Machine Name Stats' },
   { path: '/diagnosis', headind: 'Diagnosis', subheading: 'Machine Name' },
-  { path: '/ListMachine', headind: 'All Machines', subheading: 'Updated List' },
+  { path: '/list_machines', headind: 'All Machines', subheading: 'Updated List' },
+  { path: '/list_users', headind: 'All Users', subheading: 'Updated List' },
   { path: '/AddMachine', headind: 'Add Machine', subheading: 'Add new Machine' },
   { path: '/profile', headind: 'Profile', subheading: 'Username' },
 ]
