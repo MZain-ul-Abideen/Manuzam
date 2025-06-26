@@ -11,8 +11,8 @@ export async function getMachineById(machineId) {
 }
 
 export async function createMachine(machineData) {
-  const response = await api.post('/machines/', machineData);
-  return response.data;
+  const response = await api.post('/machines/', machineData)
+  return response.data
 }
 
 export async function updateMachine(machineId, machineData) {

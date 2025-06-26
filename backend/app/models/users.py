@@ -16,5 +16,4 @@ class User(Base):
 
     # Relationships
     machines = relationship("Machine", back_populates="user")
-    normal_audio_samples = relationship("NormalAudioSample", back_populates="user")
     ml_models = relationship("MLModel", back_populates="creator", foreign_keys="MLModel.created_by")

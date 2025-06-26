@@ -16,16 +16,29 @@ async def get_db():
 
 @router.post("/", response_model=sensors.SensorRead)
 async def create_sensor(sensor: sensors.SensorCreate, db: AsyncSession = Depends(get_db)):
-    # Check if machine_id exists (assuming Machine model exists)
+    print("Incoming machine_id:", sensor.machine_id)  # Debug
+
     machine = await db.execute(select(models.Machine).filter_by(id=sensor.machine_id))
     if not machine.scalar_one_or_none():
         raise HTTPException(status_code=404, detail="Machine not found")
-    
-    new_sensor = models.Sensor(**sensor.dict())
+
+    new_sensor = models.Sensor(
+        machine_id=sensor.machine_id,
+        temperature_sensor_enabled=sensor.temperature_sensor_enabled,
+        vibration_sensor_enabled=sensor.vibration_sensor_enabled,
+        temperature_value=sensor.temperature_value,
+        vibration_value=sensor.vibration_value
+    )
+
     db.add(new_sensor)
     await db.commit()
     await db.refresh(new_sensor)
+
+    print("Created sensor:", new_sensor.__dict__)  # Debug
+
     return new_sensor
+
+
 
 @router.get("/", response_model=list[sensors.SensorRead])
 async def get_sensors(db: AsyncSession = Depends(get_db)):

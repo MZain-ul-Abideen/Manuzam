@@ -100,6 +100,7 @@ const error = ref(null)
 const currentPage = ref(1)
 const pageSize = 10
 const searchQuery = ref('')
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Fetch users on component mount
 const fetchUsers = async () => {

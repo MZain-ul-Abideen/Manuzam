@@ -32,6 +32,7 @@ const email = ref('');
 const passwordHash = ref('');
 const errorMessage = ref('');
 const router = useRouter();
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const login = async () => {
   try {

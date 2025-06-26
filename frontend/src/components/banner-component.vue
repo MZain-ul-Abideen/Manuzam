@@ -22,13 +22,15 @@ const BannerText = [
   { path: '/diagnosis', headind: 'Diagnosis', subheading: 'Machine Name' },
   { path: '/list_machines', headind: 'All Machines', subheading: 'Updated List' },
   { path: '/list_users', headind: 'All Users', subheading: 'Updated List' },
-  { path: '/AddMachine', headind: 'Add Machine', subheading: 'Add new Machine' },
+  { path: '/AddMachine', headind: 'Machine Details', subheading: 'Add Machine Details' },
+  { path: '/add-sensors', headind: 'Sensors Details', subheading: 'Add Sensors Details' },
+  { path: '/add-audio', headind: 'Audio Details', subheading: 'Add Audio Files' },
   { path: '/profile', headind: 'Profile', subheading: 'Username' },
 ]
 
 // Compute the banner text based on the current route
 const currentText = computed(() => {
-  return BannerText.find(text => text.path === route.path)
+  return BannerText.find(text => route.path.startsWith(text.path))
 })
 </script>
 

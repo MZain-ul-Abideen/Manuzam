@@ -10,6 +10,8 @@ import NotFound from '../pages/404-page.vue'
 import LogIn from '../pages/login-page.vue'
 import Register from '../pages/register-page.vue'
 import ListUser from '../pages/list-user-page.vue'
+import AddAudio from '../pages/add-audio-page.vue'
+import AddSensors from '../pages/add-sensors-page.vue'
 
 // Define routes
 const routes = [
@@ -20,8 +22,10 @@ const routes = [
   { path: '/diagnosis', name: 'Diagnosis', component: Diagnosis, meta: { requiresAuth: false } },
   { path: '/list_machines', name: 'ListMachine', component: ListMachine, meta: { requiresAuth: false } },
   { path: '/AddMachine', name: 'AddMachine', component: AddMachine, meta: { requiresAuth: false } },
-  { path: '/profile', name: 'UserProfile', component: UserProfile, meta: { requiresAuth: false } },
+  { path: '/profile/:userId', name: 'UserProfile', component: UserProfile, props: true, meta: { requiresAuth: false }},
   { path: '/list_users', name: 'ListUser', component: ListUser, meta: { requiresAuth: false } },
+  { path: '/add-audio/:machineId', name: 'AddAudio', component: AddAudio, props: true , meta: { requiresAuth: false } },
+  { path: '/add-sensors/:machineId', name: 'AddSensors', component: AddSensors, props: true , meta: { requiresAuth: false } },
 
   // Public routes
   { path: '/login', name: 'LogIn', component: LogIn },

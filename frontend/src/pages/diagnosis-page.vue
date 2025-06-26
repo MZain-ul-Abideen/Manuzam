@@ -5,6 +5,7 @@ import Banner from '../components/banner-component.vue'
 const selectedFile = ref(null)
 const uploadStatus = ref('')
 const fileInput = ref(null)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function triggerFileInput() {
   fileInput.value?.click()
@@ -23,7 +24,7 @@ async function handleAndUpload(event) {
   formData.append('file', selectedFile.value)
 
   try {
-    const response = await fetch('http://localhost:8000/upload', {
+    const response = await fetch(`${API_BASE_URL}/upload`, {
       method: 'POST',
       body: formData,
     })

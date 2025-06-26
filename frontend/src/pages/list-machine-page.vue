@@ -3,16 +3,6 @@
         <Banner />
     </div>
 
-    <!-- Loading state -->
-    <div v-if="isLoading" class="text-center py-8">
-        Loading machines...
-    </div>
-
-    <!-- Error state -->
-    <div v-if="error" class="text-center text-red-500 py-8">
-        {{ error }}
-    </div>
-
     <div>
         <div class="table-top">
             <h2>List of all Machines</h2>
@@ -26,6 +16,17 @@
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                 </svg>
             </div>
+        </div>
+
+
+        <!-- Loading state -->
+        <div v-if="isLoading" class="text-center py-8">
+            Loading machines...
+        </div>
+
+        <!-- Error state -->
+        <div v-if="error" class="text-center text-red-500 py-8">
+            {{ error }}
         </div>
 
         <!-- Empty state -->
@@ -57,17 +58,24 @@
                                     class="bi bi-three-dots-vertical text-white" viewBox="0 0 16 16">
                                     <path
                                         d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                                </svg> 
+                                </svg>
                             </button>
                             <div v-if="openMenuIndex === index" class="menu-dropdown">
                                 <ul>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                                        @click="editMachine(machine.id)">Diagnose</li>
+                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
+                                        Diagnose</li>
                                     <hr>
                                     <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                        @click="goToAddAudio(machine.id)">Add Audio</li>
+                                    <hr>
+                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                        @click="goToAddSensor(machine.id)">Add Sensor</li>
+                                    <hr>
+                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer text-danger"
                                         @click="deleteMachine(machine.id)">Delete</li>
                                 </ul>
                             </div>
+
                         </td>
                     </tr>
                 </tbody>
@@ -81,7 +89,7 @@
                         class="bi bi-chevron-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-                    </svg> 
+                    </svg>
                 </button>
 
                 <span class="mx-2">{{ currentPage }} of {{ totalPages }}</span>
@@ -103,6 +111,18 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import Banner from '../components/banner-component.vue'
 import { getMachines, deleteMachine as deleteMachineApi } from '../services/machineService'
 
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+function goToAddAudio(machineId) {
+    router.push({ name: 'AddAudio', params: { machineId } })
+}
+
+function goToAddSensor(machineId) {
+    router.push({ name: 'AddSensors', params: { machineId } })
+}
+
+
 const machines = ref([])
 const isLoading = ref(false)
 const error = ref(null)
@@ -110,6 +130,7 @@ const openMenuIndex = ref(null)
 const currentPage = ref(1)
 const pageSize = 10
 const searchQuery = ref('')
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Fetch machines on component mount
 const fetchMachines = async () => {
@@ -139,14 +160,9 @@ function toggleMenu(index) {
     openMenuIndex.value = openMenuIndex.value === index ? null : index
 }
 
-function editMachine(id) {
-    openMenuIndex.value = null
-    console.log('Editing machine with ID:', id)
-}
-
 async function deleteMachine(id) {
     if (!confirm('Are you sure you want to delete this machine?')) return
-    
+
     try {
         openMenuIndex.value = null
         await deleteMachineApi(id)
@@ -178,7 +194,8 @@ const totalPages = computed(() => Math.ceil(filteredMachines.value.length / page
 
 const paginatedMachines = computed(() => {
     const start = (currentPage.value - 1) * pageSize
-    return filteredMachines.value.slice(start, start + pageSize)
+    const sorted = [...filteredMachines.value].sort((a, b) => b.id - a.id)
+    return sorted.slice(start, start + pageSize)
 })
 
 function goToPage(page) {

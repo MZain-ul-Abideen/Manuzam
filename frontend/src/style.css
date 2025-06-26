@@ -40,7 +40,7 @@ body {
   padding: 0;
   font-family: var(--font-main);
   background-color: var(--primary-1);
-  overflow-x: hidden;
+  overflow: hidden;
   color: var(--accent-color1);
   scroll-behavior: smooth;
 }
@@ -90,7 +90,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="number"] {
-  -moz-appearance: textfield; /* For Firefox */
+  -moz-appearance: textfield;
+  /* For Firefox */
 }
 
 .hero-heading {
@@ -118,6 +119,7 @@ input[type="number"] {
   border: 1px solid var(--accent-color1);
   color: var(--accent-color1) !important;
 }
+
 .button-secondary {
   border: 1px solid var(--ui-1);
   color: var(--ui-1) !important;
@@ -128,18 +130,40 @@ input[type="number"] {
   color: var(--ui-1) !important;
   border: none;
   border-radius: 15px;
-  }
+}
 
 .button-danger {
   background: var(--danger-color);
   color: var(--ui-1) !important;
   border: none;
 }
+
 .card-container {
   border: 1px solid var(--accent-color3);
   border-radius: 20px;
   padding: 30px;
   margin-bottom: 30px;
+  max-height: 750px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+.card-container::-webkit-scrollbar {
+  width: 15px;
+}
+
+.card-container::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color3);
+  border-radius: 20px;
+  border-right: 5px solid var(--primary-1);
+  border-top: 5px solid var(--primary-1);
+  border-bottom: 5px solid var(--primary-1);
+  /* Optional: inner spacing effect */
+}
+
+.card-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent-color1);
+  /* lighter on hover */
 }
 
 
@@ -180,13 +204,16 @@ input[type="number"] {
 }
 
 .coolinput .select-input {
-  appearance: none; /* hide default arrow to control styling */
+  appearance: none;
+  /* hide default arrow to control styling */
   -webkit-appearance: none;
   -moz-appearance: none;
-  padding-right: 2.5rem; /* add space for arrow */
+  padding-right: 2.5rem;
+  /* add space for arrow */
   background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat;
-  background-position: right 0.75rem center; /* adjust arrow position */
+  background-position: right 0.75rem center;
+  /* adjust arrow position */
   background-size: 1rem;
 
 }
@@ -220,8 +247,10 @@ input[type="number"] {
   color: var(--ui-1);
   font-family: Source Sans Pro, sans-serif;
   font-size: var(--body1);
-  resize: vertical; /* Allows vertical resizing only */
-  min-height: 100px; /* Optional: default height */
+  resize: vertical;
+  /* Allows vertical resizing only */
+  min-height: 100px;
+  /* Optional: default height */
 }
 
 .coolinput textarea.input:focus {
@@ -237,7 +266,8 @@ input[type="number"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   padding: 11px 10px;
-  padding-right: 1rem; /* space for arrow */
+  padding-right: 1rem;
+  /* space for arrow */
   border: 2px var(--accent-color3) solid;
   border-radius: 1rem;
   background-color: var(--primary-1);
@@ -250,7 +280,7 @@ input[type="number"] {
   font-family: inherit;
   font-size: inherit;
   cursor: pointer;
-  
+
 }
 
 .coolinput input[type="date"]:focus {

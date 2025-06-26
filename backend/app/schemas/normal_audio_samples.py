@@ -8,12 +8,10 @@ class NormalAudioSampleBase(BaseModel):
 
 class NormalAudioSampleCreate(NormalAudioSampleBase):
     machine_id: int
-    user_id: int
 
 class NormalAudioSampleRead(NormalAudioSampleBase):
     id: int
     machine_id: int
-    user_id: int
     uploaded_at: datetime
 
 class Config:

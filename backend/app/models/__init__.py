@@ -1,3 +1,5 @@
+# backend/app/models/__init__.py
+
 from .users import User
 from .machine import Machine
 from .sensors import Sensor
