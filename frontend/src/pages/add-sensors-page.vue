@@ -7,43 +7,42 @@
     <div>
       <p class="mb-3">Sensor Configuration</p>
       <div class="row mb-4">
-        <div class="coolinput col-5">
-          <label for="temperatureSensor" class="text">Temperature Sensor Enabled*</label>
-          <select name="temperatureSensor" id="temperatureSensor" class="input select-input" required
-            v-model="temperatureSensorEnabled">
-            <option disabled value="" class="option-disabled" selected>Select option</option>
-            <option value="true" class="select-options">Yes</option>
-            <option value="false" class="select-options">No</option>
-          </select>
-          <p class="mt-2 text-danger" v-if="errors.temperatureSensor">{{ errors.temperatureSensor }}</p>
-        </div>
-
-        <div class="coolinput col-5">
-          <label for="vibrationSensor" class="text">Vibration Sensor Enabled*</label>
-          <select name="vibrationSensor" id="vibrationSensor" class="input select-input" required
-            v-model="vibrationSensorEnabled">
-            <option disabled value="" class="option-disabled" selected>Select option</option>
-            <option value="true" class="select-options">Yes</option>
-            <option value="false" class="select-options">No</option>
-          </select>
-          <span class="mt-2 text-danger" v-if="errors.vibrationSensor">{{ errors.vibrationSensor }}</span>
-        </div>
-      </div>
-
-      <div class="row mb-4">
-        <!-- Show Temperature Input if Temperature Sensor is Enabled -->
-        <div class="coolinput col-5" v-if="temperatureSensorEnabled === 'true'">
-          <label for="temperatureName" class="text">Add Temperature Sensor Value</label>
-          <input type="number" placeholder="Write Temperature in number..." name="temperatureName" id="temperatureName"
-            class="input" v-model="temperatureValue">
+        <div class="d-flex flex-column col-5">
+          <div class="coolinput">
+            <label for="temperatureSensor" class="text">Temperature Sensor Enabled*</label>
+            <select name="temperatureSensor" id="temperatureSensor" class="input select-input" required
+              v-model="temperatureSensorEnabled">
+              <option disabled value="" class="option-disabled" selected>Select option</option>
+              <option value="true" class="select-options">Yes</option>
+              <option value="false" class="select-options">No</option>
+            </select>
+            <p class="mt-2 text-danger" v-if="errors.temperatureSensor">{{ errors.temperatureSensor }}</p>
+          </div>
+          <div class="coolinput mt-3" v-if="temperatureSensorEnabled === 'true'">
+            <label for="temperatureName" class="text">Add Temperature Sensor Value</label>
+            <input type="number" placeholder="Write Temperature in number..." name="temperatureName"
+              id="temperatureName" class="input" v-model="temperatureValue">
             <p class="mt-2 text-danger" v-if="errors.temperatureValue">{{ errors.temperatureValue }}</p>
+          </div>
         </div>
-        <!-- Show Vibration Input if Vibration Sensor is Enabled -->
-        <div class="coolinput col-5" v-if="vibrationSensorEnabled === 'true'">
-          <label for="vibration" class="text">Vibration Sensor Value</label>
-          <input type="number" placeholder="Write Vibration in number..." name="vibration" id="vibration" class="input"
-            v-model="vibrationValue">
+
+        <div class="d-flex flex-column col-5">
+          <div class="coolinput">
+            <label for="vibrationSensor" class="text">Vibration Sensor Enabled*</label>
+            <select name="vibrationSensor" id="vibrationSensor" class="input select-input" required
+              v-model="vibrationSensorEnabled">
+              <option disabled value="" class="option-disabled" selected>Select option</option>
+              <option value="true" class="select-options">Yes</option>
+              <option value="false" class="select-options">No</option>
+            </select>
+            <span class="mt-2 text-danger" v-if="errors.vibrationSensor">{{ errors.vibrationSensor }}</span>
+          </div>
+          <div class="coolinput mt-3" v-if="vibrationSensorEnabled === 'true'">
+            <label for="vibration" class="text">Vibration Sensor Value</label>
+            <input type="number" placeholder="Write Vibration in number..." name="vibration" id="vibration"
+              class="input" v-model="vibrationValue">
             <span class="mt-2 text-danger" v-if="errors.vibrationValue">{{ errors.vibrationValue }}</span>
+          </div>
         </div>
       </div>
 

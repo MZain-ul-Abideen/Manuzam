@@ -63,3 +63,4 @@ async def delete_machine(machine_id: int, db: AsyncSession = Depends(get_db)):
     await db.delete(machine_obj)
     await db.commit()
     return {"message": "Machine deleted successfully"}
+

@@ -42,16 +42,14 @@
 
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
-import dashboardIcon from '../assets/sidenav-icons/dashboard.svg'
-import diagnosisIcon from '../assets/sidenav-icons/diagnosis.svg'
+import { useRoute } from 'vue-router'
+import dashboardIcon from '../assets/sidenav-icons/diagnosis.svg'
 import logoutIcon from '../assets/sidenav-icons/logout.svg'
 import addmachineIcon from '../assets/sidenav-icons/machine-add.svg'
 import machinelistIcon from '../assets/sidenav-icons/machine-list.svg'
 
 const navLinks = [
   { icon: dashboardIcon, alt: 'Dashboard', to: '/dashboard' },
-  { icon: diagnosisIcon, alt: 'Diagnosis', to: '/diagnosis' },
   { icon: machinelistIcon, alt: 'Machine List', to: '/list_machines' },
   { icon: addmachineIcon, alt: 'Add Machine', to: '/AddMachine' },
 ]

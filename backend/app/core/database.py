@@ -1,8 +1,8 @@
 # backend/app/core/database.py
 
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import sessionmaker, declarative_base
-from sqlalchemy import event
+from sqlalchemy import event    
 
 DATABASE_URL = "sqlite+aiosqlite:///./app.db"
 
@@ -21,6 +21,8 @@ async_session = sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False
 )
+
+async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 @event.listens_for(engine.sync_engine, "connect")
 def enable_sqlite_foreign_key_constraint(dbapi_connection, connection_record):

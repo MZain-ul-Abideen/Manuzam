@@ -48,7 +48,7 @@ async def upload_normal_audio_sample(
 
     # 2. Prepare directory
     BASE_DIR = pathlib.Path(__file__).parent.parent
-    folder_path = BASE_DIR / "Data" / f"machine-{machine_id}" / "audio" / "normal"
+    folder_path = BASE_DIR / "Audios" / f"Machine-{machine_id}" / "Training" / "Normal"
     folder_path.mkdir(parents=True, exist_ok=True)
 
     ext = pathlib.Path(file.filename).suffix

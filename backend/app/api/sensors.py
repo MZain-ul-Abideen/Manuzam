@@ -44,3 +44,9 @@ async def create_sensor(sensor: sensors.SensorCreate, db: AsyncSession = Depends
 async def get_sensors(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(models.Sensor))
     return result.scalars().all()
+
+@router.get("/machine/{machine_id}", response_model=sensors.SensorRead | None)
+async def get_sensor_by_machine_id(machine_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Sensor).where(models.Sensor.machine_id == machine_id))
+    sensor = result.scalar_one_or_none()
+    return sensor  # No error, just return None if not found

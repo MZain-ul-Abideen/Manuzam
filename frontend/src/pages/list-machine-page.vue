@@ -62,7 +62,12 @@
                             </button>
                             <div v-if="openMenuIndex === index" class="menu-dropdown">
                                 <ul>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
+                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                        @click="goToTraining(machine.id)">
+                                        Training</li>
+                                    <hr>
+                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                        @click="goToDiagnosis(machine.id)">
                                         Diagnose</li>
                                     <hr>
                                     <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
@@ -208,6 +213,19 @@ function goToPage(page) {
 watch(searchQuery, () => {
     currentPage.value = 1
 })
+
+function goToDiagnosis(machineId) {
+  router.push({ name: 'Diagnosis', params: { machineId } })
+  openMenuIndex.value = null // close dropdown after navigation
+}
+
+
+function goToTraining(machineId) {
+  router.push({ name: 'Training', params: { machineId } })
+  openMenuIndex.value = null // close dropdown after navigation
+}
+
+
 </script>
 
 <style scoped>

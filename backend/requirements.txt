@@ -1,41 +1,22 @@
-# FastAPI server
+# backend/requirements.txt
+
 fastapi
 uvicorn[standard]
-
-# Pydantic with email validation support
 pydantic[email]
-
-# Database and ORM (assuming SQLAlchemy)
 sqlalchemy
-databases  # If using async database handling
-
-# Password hashing (often used in user management)
+databases
 passlib[bcrypt]
-
-# JWT tokens for authentication (if used)
 python-jose[cryptography]
-
-# Pydantic-related email validator
 email-validator
-
-# Audio processing (based on earlier fault_audio, normal_audio modules)
 pydub
 librosa
 soundfile
-
-# Machine Learning (assuming ML models used)
 scikit-learn
 numpy
 pandas
-joblib  # for loading/saving models
-
-# For sensor data handling (if any extra numerical processing)
+joblib
 scipy
-
-# Optional: CORS support for frontend/backend integration
 python-multipart
 aiofiles
 starlette
-
-# Optional: if you need dotenv for environment configs
 python-dotenv

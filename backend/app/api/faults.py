@@ -32,7 +32,7 @@ async def create_fault(
 
     # 2. Prepare directory
     BASE_DIR = pathlib.Path(__file__).parent.parent
-    folder_path = BASE_DIR / "Data" / f"machine-{machine_id}" / "audio" / "faulty"
+    folder_path = BASE_DIR / "Audios" / f"Machine-{machine_id}" / "Training" / "Faulty"
     folder_path.mkdir(parents=True, exist_ok=True)
 
     # 3. Temporarily save file in memory (for now, no filename assigned)

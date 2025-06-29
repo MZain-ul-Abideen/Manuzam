@@ -46,7 +46,7 @@ const register = async () => {
       email: email.value,
       password_hash: passwordHash.value,
     });
-    router.push('/login');
+    router.push('/');
   } catch (err) {
     errorMessage.value = err?.response?.data?.detail || 'Registration failed.';
     console.error(err);
