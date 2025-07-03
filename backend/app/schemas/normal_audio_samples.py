@@ -5,6 +5,7 @@ from datetime import datetime
 
 class NormalAudioSampleBase(BaseModel):
     file_path: str
+    title: str 
 
 class NormalAudioSampleCreate(NormalAudioSampleBase):
     machine_id: int
@@ -14,5 +15,5 @@ class NormalAudioSampleRead(NormalAudioSampleBase):
     machine_id: int
     uploaded_at: datetime
 
-class Config:
-    from_attributes = True
+    class Config:
+        from_attributes = True

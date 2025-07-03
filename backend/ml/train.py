@@ -1,3 +1,5 @@
+# backend/ml/train.py
+
 import os
 import joblib
 import numpy as np
@@ -14,12 +16,15 @@ MODEL_DIR = "ml/saved_models"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 
-async def train_model_for_machine(machine_id: int, db: AsyncSession, created_by: int):
-    # Step 1: Get machine
+async def train_model_for_machine(machine_id: int, db: AsyncSession):
+    # Step 1: Get machine and creator
     result = await db.execute(select(Machine).where(Machine.id == machine_id))
     machine = result.scalar_one_or_none()
     if not machine:
         raise Exception(f"Machine {machine_id} not found.")
+
+    created_by = machine.user_id
+
 
     # Step 2: Get sensor data (simplified: latest one)
     result = await db.execute(select(Sensor).where(Sensor.machine_id == machine_id))
@@ -79,6 +84,9 @@ async def train_model_for_machine(machine_id: int, db: AsyncSession, created_by:
         created_at=datetime.utcnow()
     )
     db.add(new_model_entry)
+    
+    machine.machine_trained = True
+    
     await db.commit()
 
     return {"message": "Model trained successfully.", "model_path": model_path}

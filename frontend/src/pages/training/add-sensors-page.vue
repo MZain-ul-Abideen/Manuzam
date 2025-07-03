@@ -1,13 +1,12 @@
+<!-- frontend/src/pages/training/add-sensors-page.vue -->
+
 <template>
   <div>
-    <Banner />
-  </div>
-  <div class="card-container">
     <!-- Sensor Configuration -->
     <div>
       <p class="mb-3">Sensor Configuration</p>
       <div class="row mb-4">
-        <div class="d-flex flex-column col-5">
+        <div class="d-flex flex-column col-6">
           <div class="coolinput">
             <label for="temperatureSensor" class="text">Temperature Sensor Enabled*</label>
             <select name="temperatureSensor" id="temperatureSensor" class="input select-input" required
@@ -26,7 +25,7 @@
           </div>
         </div>
 
-        <div class="d-flex flex-column col-5">
+        <div class="d-flex flex-column col-6">
           <div class="coolinput">
             <label for="vibrationSensor" class="text">Vibration Sensor Enabled*</label>
             <select name="vibrationSensor" id="vibrationSensor" class="input select-input" required
@@ -52,7 +51,7 @@
       <div class="row mb-4">
         <div class="d-flex justify-content-end gap-2 mt-4">
           <button type="button" class="button button-primary" @click="submitSensorData">
-            Submit
+            Next
           </button>
         </div>
       </div>
@@ -62,7 +61,6 @@
 </template>
 
 <script setup>
-import Banner from '../components/banner-component.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -70,6 +68,7 @@ const route = useRoute()
 const machineId = route.params.machineId
 const machine = ref(null)
 const router = useRouter()
+const emit = defineEmits(['upload-complete'])
 
 // State to track dropdown selections
 const temperatureSensorEnabled = ref('')
@@ -165,7 +164,7 @@ const submitSensorData = async () => {
     const result = await response.json();
     console.log('Sensor created:', result);
     alert('Sensor data submitted successfully!');
-    router.push({ name: 'ListMachine' });
+    emit('upload-complete')
 
   } catch (error) {
     console.error('Error:', error);

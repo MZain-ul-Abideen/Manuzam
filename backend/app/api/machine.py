@@ -1,9 +1,13 @@
+# backend/app/api/machine.py
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.core.database import async_session
 from app import models
 from app.schemas import machine
+from sqlalchemy import update
+
 
 router = APIRouter(prefix="/machines", tags=["Machines"])
 
@@ -64,3 +68,12 @@ async def delete_machine(machine_id: int, db: AsyncSession = Depends(get_db)):
     await db.commit()
     return {"message": "Machine deleted successfully"}
 
+
+@router.post("/train/{machine_id}")
+async def train_machine_model(machine_id: int, db: AsyncSession = Depends(get_db)):
+    try:
+        from ml.train import train_model_for_machine
+        result = await train_model_for_machine(machine_id=machine_id, db=db)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

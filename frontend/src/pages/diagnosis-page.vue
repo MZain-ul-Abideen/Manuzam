@@ -111,7 +111,7 @@ async function handleFinalSubmit() {
     Loading machine details...
   </div>
 
-  <div v-else class="wrapper">
+  <div v-else class="wrapper-dev">
     <h1 class="mb-4 mt-3">Diagnose Machine</h1>
 
     <!-- File input (hidden) -->
@@ -161,8 +161,8 @@ async function handleFinalSubmit() {
       <svg
         class="upload-icon"
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="26"
+        height="26"
         fill="currentColor"
         viewBox="0 0 24 24"
       >
@@ -180,34 +180,6 @@ async function handleFinalSubmit() {
 </template>
 
 <style scoped>
-.wrapper {
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.record-button-ring {
-  background-color: transparent;
-  padding: 0.7rem;
-  border-radius: 50%;
-  border: 4px solid var(--accent-color1);
-}
-
-.record-button {
-  background: var(--accent-color2);
-  border: none;
-  cursor: pointer;
-  height: 25rem;
-  width: 25rem;
-  border-radius: 50%;
-}
-
-.upload-icon {
-  fill: var(--accent-color1) !important;
-}
-
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;

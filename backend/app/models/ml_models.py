@@ -1,3 +1,5 @@
+# backend/app/models/ml_models.py
+
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Boolean
 from sqlalchemy.orm import relationship, declarative_base
 from app.core.database import Base  # ✅ correct Base

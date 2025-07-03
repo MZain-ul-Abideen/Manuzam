@@ -1,3 +1,4 @@
+# backend/app/api/ml_models.py
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -12,25 +13,25 @@ async def get_db():
     async with async_session() as session:
         yield session
 
-@router.post("/", response_model=ml_models.MLModelRead)
-async def create_ml_model(model: ml_models.MLModelCreate, db: AsyncSession = Depends(get_db)):
-    # Check if machine_id exists
-    machine = await db.execute(select(models.Machine).filter_by(id=model.machine_id))
-    if not machine.scalar_one_or_none():
-        raise HTTPException(status_code=404, detail="Machine not found")
-    
-    # Check if created_by (user_id) exists
-    user = await db.execute(select(models.User).filter_by(id=model.created_by))
-    if not user.scalar_one_or_none():
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    new_model = models.MLModel(**model.dict())
-    db.add(new_model)
-    await db.commit()
-    await db.refresh(new_model)
-    return new_model
-
 @router.get("/", response_model=list[ml_models.MLModelRead])
 async def get_ml_models(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(models.MLModel))
     return result.scalars().all()
+
+@router.get("/{model_id}", response_model=ml_models.MLModelRead)
+async def get_ml_model_by_id(model_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.MLModel).where(models.MLModel.id == model_id))
+    ml_model = result.scalar_one_or_none()
+    if not ml_model:
+        raise HTTPException(status_code=404, detail="ML Model not found")
+    return ml_model
+
+
+@router.post("/train/{machine_id}")
+async def train_machine_model(machine_id: int, db: AsyncSession = Depends(get_db)):
+    try:
+        from ml.train import train_model_for_machine
+        result = await train_model_for_machine(machine_id=machine_id, db=db)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -9,6 +9,7 @@ class NormalAudioSample(Base):
 
     id = Column(Integer, primary_key=True)
     machine_id = Column(Integer, ForeignKey('machines.id'))
+    title = Column(String)  # 👈 Add this line
     file_path = Column(String)
     uploaded_at = Column(DateTime)
 

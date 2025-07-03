@@ -10,8 +10,8 @@ import NotFound from '../pages/404-page.vue'
 import LogIn from '../pages/login-page.vue'
 import Register from '../pages/register-page.vue'
 import ListUser from '../pages/list-user-page.vue'
-import AddAudio from '../pages/add-audio-page.vue'
-import AddSensors from '../pages/add-sensors-page.vue'
+import AddAudio from '../pages/training/add-audio-page.vue'
+import AddSensors from '../pages/training/add-sensors-page.vue'
 import Training from '../pages/training-page.vue'
 
 // Define routes

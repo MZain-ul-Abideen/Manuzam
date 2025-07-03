@@ -1,13 +1,16 @@
+<!-- frontend/src/pages/training/add-audio-page.vue -->
+
 <template>
-  <div>
-    <Banner />
-  </div>
-  <div class="card-container">
+  <div >
     <!-- Normal Machine Sound -->
     <div>
       <p class="mb-3">Normal Machine Sound</p>
       <div class="row mb-4">
-        <div class="coolinput col-10" style="position: relative;">
+        <div class="coolinput col-6">
+              <label class="text">Normal Audio Title*</label>
+              <input type="text" placeholder="Add Normal Audio Title..." class="input" required v-model="normalAudioTitle" />
+            </div>
+        <div class="coolinput col-6" style="position: relative;">
           <label for="fileInput" class="text">Upload Normal Sound*</label>
           <input type="text" :placeholder="normalSoundFile?.name || 'Upload Normal Machine Sound...'" readonly class="upload-input input" disabled />
           <button type="button" class="upload-btn" @click="triggerFileUpload" :disabled="isUploading">
@@ -33,12 +36,12 @@
       <div v-if="isKnownFaultSectionActive">
         <div v-for="(fault, index) in knownFaults" :key="fault.id" class="mb-4">
           <div class="row mb-4">
-            <div class="coolinput col-5">
-              <label class="text">Fault Name*</label>
-              <input type="text" placeholder="Add Fault Name..." v-model="fault.name" class="input" required />
+            <div class="coolinput col-6">
+              <label class="text">Fault Title*</label>
+              <input type="text" placeholder="Add Fault Title..." v-model="fault.name" class="input" required />
             </div>
 
-            <div class="coolinput col-5" style="position: relative;">
+            <div class="coolinput col-6" style="position: relative;">
               <label class="text">Fault Audio*</label>
               <input type="text" :placeholder="fault.file?.name || 'Upload Fault Sound...'" readonly class="upload-input input" style="padding-right: 80px;" />
               <button type="button" class="upload-btn" @click="triggerFaultFileUpload(index)" :disabled="fault.uploading">
@@ -49,12 +52,12 @@
           </div>
 
           <div class="row mb-3">
-            <div class="coolinput col-10">
+            <div class="coolinput col-11">
               <label class="text">Fault Description</label>
               <textarea placeholder="Write here..." v-model="fault.description" class="input"></textarea>
             </div>
 
-            <div class="col-2 d-flex align-items-end" v-if="knownFaults.length > 1">
+            <div class="col-1 d-flex align-items-end" v-if="knownFaults.length >= 1">
               <button type="button" @click="removeKnownFault(index)" title="Remove this fault" style="width: 40px; height: 40px; border-radius: 50%; background-color: transparent; border: none; font-size: 18px; cursor: pointer;">
                 🗑️
               </button>
@@ -68,7 +71,7 @@
       <div class="row mb-4">
         <div class="d-flex justify-content-end gap-2 mt-4">
           <button type="button" class="button button-primary" @click="submitForm" :disabled="isSubmitting">
-            {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+            {{ isSubmitting ? 'Submitting...' : 'Next' }}
           </button>
         </div>
       </div>
@@ -77,7 +80,6 @@
 </template>
 
 <script setup>
-import Banner from '../components/banner-component.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -95,6 +97,9 @@ const isUploading = ref(false)
 const knownFaults = ref([])
 const isKnownFaultSectionActive = ref(false)
 const faultFileInputs = ref([])
+const emit = defineEmits(['upload-complete'])
+const normalAudioTitle = ref('');
+
 
 onMounted(async () => {
   try {
@@ -156,6 +161,7 @@ async function submitForm() {
   try {
     const formData = new FormData();
     formData.append('file', normalSoundFile.value);
+    formData.append('title', normalAudioTitle.value);
     formData.append('type', 'normal');
     formData.append('machine_id', machineId);
     formData.append('user_id', machine.value.user_id);
@@ -188,7 +194,7 @@ async function submitForm() {
     }
 
     alert('All audio files uploaded successfully!');
-    router.push({ name: 'ListMachine' });
+    emit('upload-complete')
 
   } catch (err) {
     console.error(err);

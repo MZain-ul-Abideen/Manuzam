@@ -1,3 +1,5 @@
+<!-- frontend/src/pages/list-machine-page.vue -->
+
 <template>
     <div>
         <Banner />
@@ -43,6 +45,7 @@
                         <th>Machine Name</th>
                         <th>Model Number</th>
                         <th>Year of Installation</th>
+                        <th>Status</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -52,6 +55,10 @@
                         <td>{{ machine.name }}</td>
                         <td>{{ machine.model_number }}</td>
                         <td>{{ machine.year_of_installation }}</td>
+                        <td>
+                            <span v-if="machine.machine_trained" class="status-capsule bg-success">Trained</span>
+                            <span v-else class="status-capsule bg-danger">Not Trained</span>
+                        </td>
                         <td class="relative text-center">
                             <button class="menu-btn" @click="toggleMenu(index)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -62,24 +69,29 @@
                             </button>
                             <div v-if="openMenuIndex === index" class="menu-dropdown">
                                 <ul>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                    <!-- Show "Training" only if not trained -->
+                                    <li v-if="!machine.machine_trained"
+                                        class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                                         @click="goToTraining(machine.id)">
-                                        Training</li>
-                                    <hr>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                        Training
+                                    </li>
+
+                                    <!-- Show "Diagnose" only if trained -->
+                                    <li v-if="machine.machine_trained"
+                                        class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                                         @click="goToDiagnosis(machine.id)">
-                                        Diagnose</li>
+                                        Diagnose
+                                    </li>
+
                                     <hr>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                                        @click="goToAddAudio(machine.id)">Add Audio</li>
-                                    <hr>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                                        @click="goToAddSensor(machine.id)">Add Sensor</li>
-                                    <hr>
+
                                     <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer text-danger"
-                                        @click="deleteMachine(machine.id)">Delete</li>
+                                        @click="deleteMachine(machine.id)">
+                                        Delete
+                                    </li>
                                 </ul>
                             </div>
+
 
                         </td>
                     </tr>
@@ -118,15 +130,6 @@ import { getMachines, deleteMachine as deleteMachineApi } from '../services/mach
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
-
-function goToAddAudio(machineId) {
-    router.push({ name: 'AddAudio', params: { machineId } })
-}
-
-function goToAddSensor(machineId) {
-    router.push({ name: 'AddSensors', params: { machineId } })
-}
-
 
 const machines = ref([])
 const isLoading = ref(false)
@@ -215,14 +218,14 @@ watch(searchQuery, () => {
 })
 
 function goToDiagnosis(machineId) {
-  router.push({ name: 'Diagnosis', params: { machineId } })
-  openMenuIndex.value = null // close dropdown after navigation
+    router.push({ name: 'Diagnosis', params: { machineId } })
+    openMenuIndex.value = null // close dropdown after navigation
 }
 
 
 function goToTraining(machineId) {
-  router.push({ name: 'Training', params: { machineId } })
-  openMenuIndex.value = null // close dropdown after navigation
+    router.push({ name: 'Training', params: { machineId } })
+    openMenuIndex.value = null // close dropdown after navigation
 }
 
 
@@ -386,5 +389,12 @@ td {
 
 .chevron-right {
     border-left: 1px solid var(--accent-color3) !important;
+}
+
+.status-capsule {
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: var(--ui-1);
+    font-size: smaller;
 }
 </style>

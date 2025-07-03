@@ -23,10 +23,12 @@ class MachineUpdate(BaseModel):
     maintenance_schedule: str | None = None
     last_maintenance_date: date | None = None
     expected_lifespan: int | None = None
+    machine_trained: bool | None = None
 
 class MachineRead(MachineBase):
     id: int
     user_id: int
+    machine_trained: bool
     created_at: datetime
 
     class Config:

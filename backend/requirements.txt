@@ -20,3 +20,4 @@ python-multipart
 aiofiles
 starlette
 python-dotenv
+matplotlib

@@ -36,6 +36,7 @@ async def get_normal_audio_samples_by_machine(machine_id: int, db: AsyncSession 
 @router.post("/", response_model=normal_audio_samples.NormalAudioSampleRead)
 async def upload_normal_audio_sample(
     machine_id: int = Form(...),
+    title: str = Form(...),
     description: str = Form(""),
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db)
@@ -78,6 +79,7 @@ async def upload_normal_audio_sample(
     # 5. Add to DB
     audio_sample = models.NormalAudioSample(
         machine_id=machine_id,
+        title=title,  
         file_path=str(file_path),
         uploaded_at=datetime.utcnow()
     )
