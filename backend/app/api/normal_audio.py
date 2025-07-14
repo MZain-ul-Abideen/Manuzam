@@ -23,15 +23,16 @@ async def get_all_normal_audio_samples(db: AsyncSession = Depends(get_db)):
     return samples
 
 
-@router.get("/machine/{machine_id}", response_model=list[normal_audio_samples.NormalAudioSampleRead])
-async def get_normal_audio_samples_by_machine(machine_id: int, db: AsyncSession = Depends(get_db)):
+@router.get("/machine/{machine_id}", response_model=normal_audio_samples.NormalAudioSampleRead | None)
+async def get_normal_audio_sample_by_machine(machine_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(models.NormalAudioSample).where(models.NormalAudioSample.machine_id == machine_id)
     )
-    samples = result.scalars().all()
-    if not samples:
-        raise HTTPException(status_code=404, detail="No normal audio samples found for this machine")
-    return samples
+    sample = result.scalar_one_or_none()
+    if not sample:
+        raise HTTPException(status_code=404, detail="No normal audio sample found for this machine")
+    return sample
+
 
 @router.post("/", response_model=normal_audio_samples.NormalAudioSampleRead)
 async def upload_normal_audio_sample(

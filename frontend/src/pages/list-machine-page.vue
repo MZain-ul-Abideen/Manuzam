@@ -218,8 +218,8 @@ watch(searchQuery, () => {
 })
 
 function goToDiagnosis(machineId) {
-    router.push({ name: 'Diagnosis', params: { machineId } })
-    openMenuIndex.value = null // close dropdown after navigation
+  router.push({ name: 'DiagnosisWithMachine', params: { machineId } })
+  openMenuIndex.value = null // close dropdown after navigation
 }
 
 

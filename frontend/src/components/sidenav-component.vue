@@ -13,7 +13,7 @@
               class="nav-link p-2 d-flex align-items-center justify-content-center"
               :to="link.to"
               :title="link.alt"
-              :class="{ active: route.path === link.to }"
+              :class="{ active: isActive(link.to) }"
             >
               <img :src="link.icon" :alt="link.alt" width="24" height="24" />
             </router-link>
@@ -43,18 +43,31 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
-import dashboardIcon from '../assets/sidenav-icons/diagnosis.svg'
+import diagnosisIcon from '../assets/sidenav-icons/diagnosis.svg'
 import logoutIcon from '../assets/sidenav-icons/logout.svg'
 import addmachineIcon from '../assets/sidenav-icons/machine-add.svg'
 import machinelistIcon from '../assets/sidenav-icons/machine-list.svg'
 
 const navLinks = [
-  { icon: dashboardIcon, alt: 'Dashboard', to: '/dashboard' },
+  { icon: diagnosisIcon, alt: 'Diagnosis', to: '/diagnosis' },
   { icon: machinelistIcon, alt: 'Machine List', to: '/list_machines' },
   { icon: addmachineIcon, alt: 'Add Machine', to: '/AddMachine' },
 ]
 
 const route = useRoute()
+
+const isActive = (linkTo) => {
+  if (linkTo === '/diagnosis') {
+    return route.path.startsWith('/diagnosis')
+  } else if (linkTo === '/list_machines') {
+    return route.path.startsWith('/list_machines') || route.path.startsWith('/training')
+  } else if (linkTo === '/AddMachine') {
+    return route.path.startsWith('/AddMachine')
+  }
+  return route.path === linkTo
+}
+
+
 </script>
 
 

@@ -25,3 +25,4 @@ class Machine(Base):
     normal_audio_sample = relationship("NormalAudioSample", back_populates="machine", uselist=False)
     faults = relationship("Fault", back_populates="machine")
     ml_models = relationship("MLModel", back_populates="machine")
+    predictions = relationship("Prediction", back_populates="machine")

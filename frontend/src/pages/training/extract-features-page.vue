@@ -79,51 +79,68 @@ async function trainMachine() {
 
 <style scoped>
 .loader {
- width: 100%;
- height: 100%;
- display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 125px;
+  height: 125px;
+  margin: auto;
+  position: relative;
 }
 
-.loader::before {
- content: "";
- box-sizing: border-box;
- position: absolute;
- width: 200px;
- height: 200px;
- border-radius: 50%;
- border-top: 10px solid var(--primary-1);
- border-right: 10px solid transparent;
- animation: spinner8217 0.8s linear infinite;
-}
-
-@keyframes spinner8217 {
- to {
-  transform: rotate(360deg);
- }
-}
-
-.text-container {
-  background: transparent;
-  height: 100px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.text-container h1 {
+.loader:before {
+  content: '';
+  width: 120px;
+  height: 10px;
+  background: #0D5326;
   position: absolute;
+  top: 150px;
+  left: 0;
+  border-radius: 50%;
+  animation: shadow324 0.5s linear infinite;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+.loader:after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  background: var(--primary-1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 4px;
+  animation: jump7456 0.5s linear infinite;
 }
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+
+@keyframes jump7456 {
+  15% {
+    border-bottom-right-radius: 3px;
+  }
+
+  25% {
+    transform: translateY(9px) rotate(22.5deg);
+  }
+
+  50% {
+    transform: translateY(18px) scale(1, .9) rotate(45deg);
+    border-bottom-right-radius: 40px;
+  }
+
+  75% {
+    transform: translateY(9px) rotate(67.5deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(90deg);
+  }
+}
+
+@keyframes shadow324 {
+
+  0%,
+    100% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1.2, 1);
+  }
 }
 </style>

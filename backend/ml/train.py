@@ -51,8 +51,10 @@ async def train_model_for_machine(machine_id: int, db: AsyncSession):
     normal_samples = result.scalars().all()
     for sample in normal_samples:
         features = extract_total_features(sample.file_path, machine_data, sensor_data)
+        label = sample.title if sample.title else "normal"
         X.append(features)
-        y.append("normal")
+        y.append(label)
+
 
     # Faulty samples
     result = await db.execute(select(Fault).where(Fault.machine_id == machine_id))

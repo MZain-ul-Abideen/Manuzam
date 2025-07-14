@@ -18,7 +18,7 @@
             <p class="mt-2 text-danger" v-if="errors.temperatureSensor">{{ errors.temperatureSensor }}</p>
           </div>
           <div class="coolinput mt-3" v-if="temperatureSensorEnabled === 'true'">
-            <label for="temperatureName" class="text">Add Temperature Sensor Value</label>
+            <label for="temperatureName" class="text">Average Machine Temperature</label>
             <input type="number" placeholder="Write Temperature in number..." name="temperatureName"
               id="temperatureName" class="input" v-model="temperatureValue">
             <p class="mt-2 text-danger" v-if="errors.temperatureValue">{{ errors.temperatureValue }}</p>
@@ -37,7 +37,7 @@
             <span class="mt-2 text-danger" v-if="errors.vibrationSensor">{{ errors.vibrationSensor }}</span>
           </div>
           <div class="coolinput mt-3" v-if="vibrationSensorEnabled === 'true'">
-            <label for="vibration" class="text">Vibration Sensor Value</label>
+            <label for="vibration" class="text">Average Machine Vibration</label>
             <input type="number" placeholder="Write Vibration in number..." name="vibration" id="vibration"
               class="input" v-model="vibrationValue">
             <span class="mt-2 text-danger" v-if="errors.vibrationValue">{{ errors.vibrationValue }}</span>
