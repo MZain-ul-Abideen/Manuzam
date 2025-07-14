@@ -1,0 +1,79 @@
+# backend/app/api/machine.py
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from app.core.database import async_session
+from app import models
+from app.schemas import machine
+from sqlalchemy import update
+
+
+router = APIRouter(prefix="/machines", tags=["Machines"])
+
+# Dependency to get DB session
+async def get_db():
+    async with async_session() as session:
+        yield session
+
+@router.post("/", response_model=machine.MachineRead)
+async def create_machine(machine: machine.MachineCreate, db: AsyncSession = Depends(get_db)):
+    # Check if user_id exists
+    user = await db.execute(select(models.User).filter_by(id=machine.user_id))
+    if not user.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    new_machine = models.Machine(**machine.dict())
+    db.add(new_machine)
+    await db.commit()
+    await db.refresh(new_machine)
+    return new_machine
+
+@router.get("/", response_model=list[machine.MachineRead])
+async def get_machines(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Machine))
+    return result.scalars().all()
+
+@router.get("/{machine_id}", response_model=machine.MachineRead)
+async def get_machine_by_id(machine_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Machine).where(models.Machine.id == machine_id))
+    machine_obj = result.scalar_one_or_none()
+    if not machine_obj:
+        raise HTTPException(status_code=404, detail="Machine not found")
+    return machine_obj
+
+@router.put("/{machine_id}", response_model=machine.MachineRead)
+async def update_machine(machine_id: int, update_data: machine.MachineUpdate, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Machine).where(models.Machine.id == machine_id))
+    machine_obj = result.scalar_one_or_none()
+    if not machine_obj:
+        raise HTTPException(status_code=404, detail="Machine not found")
+    
+    update_fields = update_data.dict(exclude_unset=True)
+    for field, value in update_fields.items():
+        setattr(machine_obj, field, value)
+
+    await db.commit()
+    await db.refresh(machine_obj)
+    return machine_obj
+
+@router.delete("/{machine_id}")
+async def delete_machine(machine_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(models.Machine).where(models.Machine.id == machine_id))
+    machine_obj = result.scalar_one_or_none()
+    if not machine_obj:
+        raise HTTPException(status_code=404, detail="Machine not found")
+
+    await db.delete(machine_obj)
+    await db.commit()
+    return {"message": "Machine deleted successfully"}
+
+
+@router.post("/train/{machine_id}")
+async def train_machine_model(machine_id: int, db: AsyncSession = Depends(get_db)):
+    try:
+        from ml.train import train_model_for_machine
+        result = await train_model_for_machine(machine_id=machine_id, db=db)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -1,3 +1,5 @@
+#backend/app/schemas/ml_models.py
+
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -15,5 +17,5 @@ class MLModelRead(MLModelBase):
     created_by: int
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+class Config:
+    from_attributes = True

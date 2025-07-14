@@ -1,3 +1,5 @@
+<!-- frontend/src/pages/list-machine-page.vue -->
+
 <template>
     <div>
         <Banner />
@@ -19,7 +21,23 @@
         </div>
 
 
-        <div class="table-div text-center">
+        <!-- Loading state -->
+        <div v-if="isLoading" class="text-center py-8">
+            Loading machines...
+        </div>
+
+        <!-- Error state -->
+        <div v-if="error" class="text-center text-red-500 py-8">
+            {{ error }}
+        </div>
+
+        <!-- Empty state -->
+        <div v-if="!isLoading && !error && machines.length === 0" class="text-center py-8">
+            No machines found
+        </div>
+
+        <!-- Table (only show when not loading and no error) -->
+        <div v-if="!isLoading && !error && machines.length > 0" class="table-div text-center">
             <table role="grid">
                 <thead class="mb-4">
                     <tr>
@@ -27,44 +45,69 @@
                         <th>Machine Name</th>
                         <th>Model Number</th>
                         <th>Year of Installation</th>
+                        <th>Status</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(machine, index) in paginatedMachines" :key="(currentPage - 1) * pageSize + index">
+                    <tr v-for="(machine, index) in paginatedMachines" :key="machine.id">
                         <td>{{ machine.id }}</td>
                         <td>{{ machine.name }}</td>
-                        <td>{{ machine.model }}</td>
-                        <td>{{ machine.year }}</td>
+                        <td>{{ machine.model_number }}</td>
+                        <td>{{ machine.year_of_installation }}</td>
+                        <td>
+                            <span v-if="machine.machine_trained" class="status-capsule bg-success">Trained</span>
+                            <span v-else class="status-capsule bg-danger">Not Trained</span>
+                        </td>
                         <td class="relative text-center">
                             <button class="menu-btn" @click="toggleMenu(index)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-three-dots-vertical text-white" viewBox="0 0 16 16">
                                     <path
                                         d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                                </svg> </button>
+                                </svg>
+                            </button>
                             <div v-if="openMenuIndex === index" class="menu-dropdown">
                                 <ul>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                                        @click="editMachine(index)">Diagnose</li>
+                                    <!-- Show "Training" only if not trained -->
+                                    <li v-if="!machine.machine_trained"
+                                        class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                        @click="goToTraining(machine.id)">
+                                        Training
+                                    </li>
+
+                                    <!-- Show "Diagnose" only if trained -->
+                                    <li v-if="machine.machine_trained"
+                                        class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                        @click="goToDiagnosis(machine.id)">
+                                        Diagnose
+                                    </li>
+
                                     <hr>
-                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                                        @click="deleteMachine(machine.id)">Delete</li>
+
+                                    <li class="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer text-danger"
+                                        @click="deleteMachine(machine.id)">
+                                        Delete
+                                    </li>
                                 </ul>
                             </div>
+
+
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="pagination-controls mt-4">
+
+        <div v-if="!isLoading && !error && machines.length > 0" class="pagination-controls mt-4">
             <div class="pagination-capsule">
                 <button class="chevron-left" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-chevron-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-                    </svg> </button>
+                    </svg>
+                </button>
 
                 <span class="mx-2">{{ currentPage }} of {{ totalPages }}</span>
 
@@ -77,84 +120,43 @@
                 </button>
             </div>
         </div>
-
     </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import Banner from '../components/banner-component.vue'
+import { getMachines, deleteMachine as deleteMachineApi } from '../services/machineService'
 
-const machines = reactive([
-    { id: '1', name: 'Machine 1', model: 'GRE12432', year: '2017' },
-    { id: '2', name: 'Machine 2', model: 'FD243242', year: '2020' },
-    { id: '3', name: 'Machine 3', model: 'VDV2313', year: '2025' },
-    { id: '4', name: 'Machine 4', model: 'GBF32421', year: '2017' },
-    { id: '5', name: 'Machine 5', model: 'FS412321', year: '2002' },
-    { id: '6', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '7', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '8', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '9', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '10', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '11', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '12', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '13', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '14', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '15', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '16', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '17', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '18', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '19', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '20', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '21', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '22', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '23', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '24', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '25', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '26', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '27', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '28', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '29', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '30', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '31', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '32', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '33', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '34', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '35', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '36', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '37', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '38', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '39', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '41', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '42', name: 'Machine 6', model: 'JMK23124', year: '2020' },
-    { id: '43', name: 'Machine 16', model: 'JMK23124', year: '2020' },
-])
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
+const machines = ref([])
+const isLoading = ref(false)
+const error = ref(null)
 const openMenuIndex = ref(null)
+const currentPage = ref(1)
+const pageSize = 10
+const searchQuery = ref('')
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function toggleMenu(index) {
-    // If clicking the same menu, close it. Otherwise, open the new one
-    openMenuIndex.value = openMenuIndex.value === index ? null : index
-}
-
-function editMachine(index) {
-    openMenuIndex.value = null
-}
-
-function deleteMachine(id) {
-    openMenuIndex.value = null
-    const idx = machines.findIndex(m => m.id === id)
-    if (idx !== -1) machines.splice(idx, 1)
-}
-
-
-function handleClickOutside(event) {
-    if (!event.target.closest('.relative')) {
-        openMenuIndex.value = null
+// Fetch machines on component mount
+const fetchMachines = async () => {
+    try {
+        isLoading.value = true
+        error.value = null
+        const response = await getMachines()
+        machines.value = response
+    } catch (err) {
+        error.value = 'Failed to fetch machines. Please try again later.'
+        console.error('Error fetching machines:', err)
+    } finally {
+        isLoading.value = false
     }
 }
 
 onMounted(() => {
+    fetchMachines()
     document.addEventListener('click', handleClickOutside)
 })
 
@@ -162,14 +164,46 @@ onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside)
 })
 
-const currentPage = ref(1)
-const pageSize = 15
+function toggleMenu(index) {
+    openMenuIndex.value = openMenuIndex.value === index ? null : index
+}
+
+async function deleteMachine(id) {
+    if (!confirm('Are you sure you want to delete this machine?')) return
+
+    try {
+        openMenuIndex.value = null
+        await deleteMachineApi(id)
+        await fetchMachines()
+    } catch (err) {
+        error.value = 'Failed to delete machine. Please try again.'
+        console.error('Error deleting machine:', err)
+    }
+}
+
+function handleClickOutside(event) {
+    if (!event.target.closest('.relative')) {
+        openMenuIndex.value = null
+    }
+}
+
+// Computed properties for pagination and filtering
+const filteredMachines = computed(() => {
+    const query = searchQuery.value.toLowerCase().trim()
+    if (!query) return machines.value
+
+    return machines.value.filter(machine =>
+        machine.name.toLowerCase().includes(query) ||
+        machine.model_number.toLowerCase().includes(query)
+    )
+})
 
 const totalPages = computed(() => Math.ceil(filteredMachines.value.length / pageSize))
 
 const paginatedMachines = computed(() => {
     const start = (currentPage.value - 1) * pageSize
-    return filteredMachines.value.slice(start, start + pageSize)
+    const sorted = [...filteredMachines.value].sort((a, b) => b.id - a.id)
+    return sorted.slice(start, start + pageSize)
 })
 
 function goToPage(page) {
@@ -178,21 +212,21 @@ function goToPage(page) {
     }
 }
 
-const searchQuery = ref('')
-
-const filteredMachines = computed(() => {
-    const query = searchQuery.value.toLowerCase().trim()
-    if (!query) return machines
-
-    return machines.filter(machine =>
-        machine.name.toLowerCase().includes(query) ||
-        machine.model.toLowerCase().includes(query)
-    )
-})
-
+// Reset to first page when search query changes
 watch(searchQuery, () => {
     currentPage.value = 1
 })
+
+function goToDiagnosis(machineId) {
+  router.push({ name: 'DiagnosisWithMachine', params: { machineId } })
+  openMenuIndex.value = null // close dropdown after navigation
+}
+
+
+function goToTraining(machineId) {
+    router.push({ name: 'Training', params: { machineId } })
+    openMenuIndex.value = null // close dropdown after navigation
+}
 
 
 </script>
@@ -355,5 +389,12 @@ td {
 
 .chevron-right {
     border-left: 1px solid var(--accent-color3) !important;
+}
+
+.status-capsule {
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: var(--ui-1);
+    font-size: smaller;
 }
 </style>

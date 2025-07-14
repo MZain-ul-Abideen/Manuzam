@@ -1,0 +1,23 @@
+# backend/requirements.txt
+
+fastapi
+uvicorn[standard]
+pydantic[email]
+sqlalchemy
+databases
+passlib[bcrypt]
+python-jose[cryptography]
+email-validator
+pydub
+librosa
+soundfile
+scikit-learn
+numpy
+pandas
+joblib
+scipy
+python-multipart
+aiofiles
+starlette
+python-dotenv
+matplotlib

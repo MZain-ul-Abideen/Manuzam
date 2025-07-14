@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Boolean
-from sqlalchemy.orm import relationship, declarative_base
-from app.core.database import Base  # ✅ correct Base
+# models/faults.py
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from app.core.database import Base
+
 class Fault(Base):
     __tablename__ = 'faults'
 
@@ -8,6 +10,7 @@ class Fault(Base):
     machine_id = Column(Integer, ForeignKey('machines.id'))
     name = Column(String)
     description = Column(String)
+    file_path = Column(String, nullable=True)
+    uploaded_at = Column(DateTime, nullable=True)
 
     machine = relationship("Machine", back_populates="faults")
-    fault_audio_samples = relationship("FaultAudioSample", back_populates="fault")
