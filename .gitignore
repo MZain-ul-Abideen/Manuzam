@@ -26,3 +26,14 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Audio / dataset files
+*.aac
+*.wav
+*.mp3
+*.flac
+
+# Trained ML models
+*.joblib
+*.pkl
+*.pickle
