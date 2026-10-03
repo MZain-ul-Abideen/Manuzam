@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Node
+node_modules/
+
+# Build
+dist/
+dist-ssr/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Manuzam data / generated files
+backend/app/Audios/
+backend/ml/saved_models/
+backend/ml/temp_uploads/
+
+# Audio / extracted samples
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.sc
+
+# ML model files
+*.pt
+*.pth
+*.pkl
+*.joblib
+*.h5
+*.onnx
+*.bin
